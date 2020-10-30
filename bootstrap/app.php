@@ -36,6 +36,10 @@ $app->withEloquent();
 | your own bindings here if you like or you can make another file.
 |
 */
+$app->middleware([
+    App\Http\Middleware\CORSMiddleware::class,
+   'CorsMiddleware' => App\Http\Middleware\CORSMiddleware::class,
+]);
 
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,

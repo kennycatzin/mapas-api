@@ -13,6 +13,7 @@ class Controller extends BaseController
     protected function respondWithToken($token, $id)
     {
         return response()->json([
+            'ok' => 'true',
             'id' => $id,
             'token' => $token,
             'token_type' => 'bearer',

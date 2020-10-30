@@ -54,20 +54,29 @@ class AuthController extends Controller
         ]);
 
         $data = DB::table('users')
-        ->select('id')
+        ->select('id', 'activo')
         ->where('email', $request['email'])
         ->first();
+        if($data != null){
+
+      
+       
             
 
 
         $credentials = $request->only(['email', 'password']);
 
         if (! $token = Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            return response()->json(['ok' => 'no','mensaje' => 'Acceso incorrecto'], 401);
+        }
+        if(!$data->activo){
+            return response()->json(['ok' => 'pago', 'mensaje' => "Favor de pagar!!!"], 200);
         }
 
-
         return $this->respondWithToken($token, $data->id);
+    }else{
+        return response()->json(['ok'=>'null', 'mensaje' => 'Usuario no encontrado'], 401);
+    }
     }
 
 
