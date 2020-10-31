@@ -31,18 +31,18 @@ class ViajeController extends Controller
      $request->get('usuario_creacion'), $this->tiempo(), $this->tiempo(), true]);
 
 
-     $viajeId = DB::getPdo()->lastInsertId();
+    //  $viajeId = DB::getPdo()->lastInsertId();
 
-    $midetalle = $ojso["detalle"];
-    foreach($midetalle as $detalle){
+    // $midetalle = $ojso["detalle"];
+    // foreach($midetalle as $detalle){
 
-        DB::insert('insert into detalle_viaje (id_viaje, latitud, longitud, precio, usuario_creacion,
-        usuario_modificacion, fecha_creacion, fecha_modificacion, activo)
-        values
-        (?,?,?,?,?,?,?,?,?)', 
-        [$viajeId, $detalle['latitud'], $detalle['longitud'], $detalle['precio'], $detalle['usuario_creacion'],
-        $detalle['usuario_creacion'],$this->tiempo(), $this->tiempo(), true]);
-    }
+    //     DB::insert('insert into detalle_viaje (id_viaje, latitud, longitud, precio, usuario_creacion,
+    //     usuario_modificacion, fecha_creacion, fecha_modificacion, activo)
+    //     values
+    //     (?,?,?,?,?,?,?,?,?)', 
+    //     [$viajeId, $detalle['latitud'], $detalle['longitud'], $detalle['precio'], $detalle['usuario_creacion'],
+    //     $detalle['usuario_creacion'],$this->tiempo(), $this->tiempo(), true]);
+    // }
     return $this->crearRespuesta('El elemento ha sido creado', 201);
 
    }

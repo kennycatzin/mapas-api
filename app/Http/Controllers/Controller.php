@@ -22,7 +22,7 @@ class Controller extends BaseController
     }
 
     public function crearRespuesta($datos, $codigo) {
-        return response()->json(['data' => $datos], $codigo);
+        return response()->json(['data' => $datos, 'ok'=>true], $codigo);
     }
     public function crearRespuestaError($mensaje, $codigo){
         return response()->json(['message'=>$mensaje, 'code'=>$codigo], $codigo);
