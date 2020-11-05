@@ -39,6 +39,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->get('get-viajes/{id}', 'ViajeController@getViajesDiarios');
 
+    $router->get('get-tarifas', 'TarifaController@getTarifas');
 
     
 });

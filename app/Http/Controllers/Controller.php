@@ -10,13 +10,14 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 
 class Controller extends BaseController
 {
-    protected function respondWithToken($token, $id)
+    protected function respondWithToken($token, $tarifas, $id)
     {
         return response()->json([
             'ok' => 'true',
-            'id' => $id,
+            'operador' => $id,
             'token' => $token,
             'token_type' => 'bearer',
+            'tarifas' => $tarifas,
             'expires_in' => Auth::factory()->getTTL() * 60
         ], 200);
     }
