@@ -62,7 +62,7 @@ class AuthController extends Controller
         $data = DB::table('users')
         ->join('vw_catoperadores', 'vw_catoperadores.OperadorID', '=', 'users.id_operador')
         ->select('users.id_operador', 'users.id', 'users.activo', 'users.imagen', 'vw_catoperadores.NumEconomico', 
-        'vw_catoperadores.TituloSindical')
+        'vw_catoperadores.TituloSindical', DB::raw("CONCAT(vw_catoperadores.Nombre,' ',vw_catoperadores.ApellidoPaterno) AS nombre"))
         ->where('users.usuario', $request['usuario'])
         ->first();
         if($data != null){
