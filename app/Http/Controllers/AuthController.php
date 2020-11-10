@@ -57,6 +57,7 @@ class AuthController extends Controller
             'usuario' => 'required|string',
             'password' => 'required|string',
         ]);
+        //probando para subir
 
         $data = DB::table('users')
         ->join('vw_catoperadores', 'vw_catoperadores.OperadorID', '=', 'users.id_operador')
