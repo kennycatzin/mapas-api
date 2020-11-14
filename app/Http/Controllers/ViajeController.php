@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use  App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
 
 
 class ViajeController extends Controller
@@ -51,6 +53,7 @@ class ViajeController extends Controller
        ->select('*')
        ->where('id_chofer', $id)
        ->where('activo', true)
+       ->whereDate('fecha_creacion', Carbon::today())
        ->get();
 
        $total = DB::table('viaje')
