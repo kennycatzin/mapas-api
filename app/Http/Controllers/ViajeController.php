@@ -61,6 +61,7 @@ class ViajeController extends Controller
        ->select('*')
        ->where('id_chofer', $id)
        ->where('activo', true)
+       ->whereDate('fecha_creacion', Carbon::today())
        ->sum('precio');
 
        return response()->json(['data' => $data, 'total'=> $total], 200);
