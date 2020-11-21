@@ -54,6 +54,7 @@ class ViajeController extends Controller
        ->where('id_chofer', $id)
        ->where('activo', true)
        ->whereDate('fecha_creacion', Carbon::today())
+       ->orderBy('fecha_creacion', 'DESC')
        ->get();
 
        $total = DB::table('viaje')
