@@ -32,7 +32,7 @@ class TarifaController extends Controller
             ->select("orden", "precio", "km_inicial", "km_final")
             ->where("activo", true)
             ->where("id_horario", $horario->id_horario)
-            ->orderBy("orden", "ASC")
+            ->orderBy("orden", "DESC")
             ->get();
 
             if($contador == 0){
