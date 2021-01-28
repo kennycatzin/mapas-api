@@ -26,7 +26,7 @@ class TarifaController extends Controller
         ->select("id_horario", "nombre", "hora_inicial", "hora_final")
         ->where("activo", true)
         ->get();
-
+// hola
         foreach($horarios as $horario){
             $detalle_horario = DB::table('detalle_horario')
             ->select("orden", "precio", "km_inicial", "km_final")
