@@ -59,6 +59,7 @@ class AuthController extends Controller
         ]);
         //probando para subir
 
+// mis cambios
 
         $data = DB::table('users')
         ->join('vw_catoperadores', 'vw_catoperadores.OperadorID', '=', 'users.id_operador')
