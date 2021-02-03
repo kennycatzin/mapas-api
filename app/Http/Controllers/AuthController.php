@@ -25,9 +25,7 @@ class AuthController extends Controller
             'password' => 'required|confirmed',
             'usuario' => 'required|unique:users'
         ]);
-
         try {
-
             $user = new User;
             $user->name = $request->input('name');
             $user->email = $request->input('email');
@@ -37,14 +35,9 @@ class AuthController extends Controller
             $user->activo = true;
             $plainPassword = $request->input('password');
             $user->password = app('hash')->make($plainPassword);
-
             $user->save();
-
-            //return successful response
             return response()->json(['user' => $user, 'message' => 'CREATED'], 201);
-
         } catch (\Exception $e) {
-            //return error message
             return response()->json(['message' => 'User Registration Failed!'], 409);
         }
 
@@ -57,10 +50,7 @@ class AuthController extends Controller
             'usuario' => 'required|string',
             'password' => 'required|string',
         ]);
-        //probando para subir
-
-// mis cambios
-
+        
         $data = DB::table('users')
         ->join('vw_catoperadores', 'vw_catoperadores.OperadorID', '=', 'users.id_operador')
         ->select('users.id_operador', 'vw_catoperadores.OperadorID', 'users.id', 'users.activo', 'users.imagen', 'vw_catoperadores.NumEconomico', 
@@ -68,23 +58,43 @@ class AuthController extends Controller
         ->where('users.usuario', $request['usuario'])
         ->first();
         if($data != null){
-        $credentials = $request->only(['usuario', 'password']);
-        if (! $token = Auth::attempt($credentials)) {
-            return response()->json(['ok' => 'no','mensaje' => 'Acceso incorrecto'], 401);
+            $credentials = $request->only(['usuario', 'password']);
+            if (! $token = Auth::attempt($credentials)) {
+                return response()->json(['ok' => 'no','mensaje' => 'Acceso incorrecto'], 401);
+            }
+            if(!$data->activo){
+                return response()->json(['ok' => 'pago', 'mensaje' => "Favor de pagar!!!"], 200);
+            }
+            $tarifaController = new tarifa();
+            $tarifas = $tarifaController->getTarifas();
+            $data->imagen = getenv("RUTA_FOTOS", "");
+            $data->imagen = $data->imagen.'/F'.$data->OperadorID.".jpg";
+            return $this->respondWithToken($token, $tarifas, $data);
+        }else{
+            return response()->json(['ok'=>'null', 'mensaje' => 'Usuario no encontrado'], 401);
         }
-        if(!$data->activo){
-            return response()->json(['ok' => 'pago', 'mensaje' => "Favor de pagar!!!"], 200);
-        }
-        $tarifaController = new tarifa();
-
-        $tarifas = $tarifaController->getTarifas();
-        $data->imagen = getenv("RUTA_FOTOS", "");
-        $data->imagen = $data->imagen.'/F'.$data->OperadorID.".jpg";
-
-        return $this->respondWithToken($token, $tarifas, $data);
-    }else{
-        return response()->json(['ok'=>'null', 'mensaje' => 'Usuario no encontrado'], 401);
     }
+    public function renovarToken(Request $request){
+        $header = $request->header('x-token');
+        $id = $request->header('id');
+        $data = DB::table('users')
+        ->join('vw_catoperadores', 'vw_catoperadores.OperadorID', '=', 'users.id_operador')
+        ->select('users.id_operador', 'vw_catoperadores.OperadorID', 'users.id', 'users.activo', 'users.imagen', 'vw_catoperadores.NumEconomico', 
+        'vw_catoperadores.TituloSindical', DB::raw("CONCAT(vw_catoperadores.Nombre,' ',vw_catoperadores.ApellidoPaterno) AS nombre"))
+        ->where('users.id', $id)
+        ->first();
+        if($data != null){
+            if(!$data->activo){
+                return response()->json(['ok' => 'pago', 'mensaje' => "Favor de pagar!!!"], 200);
+            }
+            $tarifaController = new tarifa();
+            $tarifas = $tarifaController->getTarifas();
+            $data->imagen = getenv("RUTA_FOTOS", "");
+            $data->imagen = $data->imagen.'/F'.$data->OperadorID.".jpg";
+            return $this->respondWithToken("tokenSemilla", $tarifas, $data);
+        }else{
+            return response()->json(['ok'=>'null', 'mensaje' => 'Usuario no encontrado'], 401);
+        }
     }
 
 

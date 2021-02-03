@@ -27,6 +27,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
    $router->post('register', 'AuthController@register');
      // Matches "/api/login
     $router->post('login', 'AuthController@login');
+    $router->get('renovar-token', 'AuthController@renovarToken');
+
 
     // Matches "/api/profile
     $router->get('profile', 'UserController@profile');
@@ -43,6 +45,13 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('get-viajes/{id}', 'ViajeController@getViajesDiarios');
 
     $router->get('get-tarifas', 'TarifaController@getTarifas');
+
+    $router->post('store-mensaje', 'MensajeController@storeMensaje');
+    $router->get('mensaje-visto/{id}', 'MensajeController@mensajeVisto');
+    $router->get('get-detalle-mensaje/{id}', 'MensajeController@getDetalleMensaje');
+    $router->get('get-mensajes/{id}', 'MensajeController@getMensajes');
+
+
 
     
 });
