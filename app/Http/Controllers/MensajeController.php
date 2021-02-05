@@ -77,6 +77,7 @@ class MensajeController extends Controller
             ->join('gen_catestatus', 'gen_catestatus.EstatusID', '=', 'mensaje.id_status')
             ->select("mensaje.id_mensaje", "mensaje.id_viaje","mensaje.titulo", "mensaje.mensaje", "mensaje.tipo", 
             "users.name", "mensaje.id_status", "gen_catestatus.Estatus")
+            ->whereDate('mensaje.fecha_creacion', Carbon::today())
             ->where('mensaje.id_destino', $id)
             ->where('mensaje.id_status', $id_status)
             ->where('mensaje.activo', true)
