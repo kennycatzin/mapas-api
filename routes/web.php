@@ -41,8 +41,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('users', 'UserController@allUsers');
 
     $router->post('store-viaje', 'ViajeController@guardarViaje');
-
     $router->get('get-viajes/{id}', 'ViajeController@getViajesDiarios');
+    $router->get('aceptar-viaje/{id_viaje}', 'ViajeController@aceptarViaje');
+    $router->get('rechazar-viaje/{id_viaje}', 'ViajeController@rechazarViaje');
 
     $router->get('get-tarifas', 'TarifaController@getTarifas');
 
@@ -50,8 +51,5 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('mensaje-visto/{id}', 'MensajeController@mensajeVisto');
     $router->get('get-detalle-mensaje/{id}', 'MensajeController@getDetalleMensaje');
     $router->get('get-mensajes/{id}', 'MensajeController@getMensajes');
-
-
-
-    
+    $router->get('get-mensajes-nuevos/{id}', 'MensajeController@getMensajesNuevos');
 });

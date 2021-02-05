@@ -66,4 +66,31 @@ class ViajeController extends Controller
 
        return response()->json(['data' => $data, 'total'=> $total], 200);
    }
+   public function aceptarViaje($id_viaje){
+       $id_asignado = 12;
+        DB::update('update cc_asignacionviajes
+         set fecha = ?, estatus_id = ? 
+         where id = ?', 
+         [$this->tiempo(), $id_asignado, $id_viaje]);
+         return $this->crearRespuesta("Se ha asignado el viaje correctamente", 200);    
+    }
+    public function rechazarViaje($id_viaje){
+        $id_rechazado= 14;
+        $id_activo = 5;
+        DB::update('update cc_asignacionviajes
+        set fecha = ?, estatus_id = ? 
+        where id = ?', 
+        [$this->tiempo(), $id_rechazado, $id_viaje]);
+
+        $data= DB::table('cc_asignacionviajes')
+        ->select('viajes_id')
+        ->where('id', $id_viaje)
+        ->first();
+
+        DB::update('update cc_viajes set 
+        fecha = ?, estatus_id = ? 
+        where id = ?', 
+        [$this->tiempo(), $id_activo, $data->viajes_id]);
+        return $this->crearRespuesta("Se ha rechazado el viaje", 200);    
+    }
 }

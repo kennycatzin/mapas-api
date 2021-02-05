@@ -15,12 +15,12 @@ class MensajeController extends Controller
         try {
             $status = 5;
             DB::insert('insert into mensaje 
-            (id_origen, id_destino, id_status, titulo, mensaje, tipo,
+            (id_origen, id_destino, id_status, id_viaje, titulo, mensaje, tipo,
             activo, fecha_creacion, fecha_modificacion, usuario_creacion,
-            usuario_modificacion) 
-            values (?,?,?,?,?,?,?,?,?,?,?)', 
-            [10, 4, $status, "Mensajed de Call Center", "Nuevo viaje para Calle 14 sin numero 25a y 25 b colonia benito juarez oriente
-            casa roja, rejas negras, coche en la puerta", 2, true, "2021-02-03", "2021-02-03", 1, 1]);
+            usuario_modificacion, orden) 
+            values (?,?,?,?,?,?,?,?,?,?,?,?,?)', 
+            [10, 4, $status, 0, "Adeudo de viaje", "PAga we!!", 
+            "TG", true, $this->tiempo(), $this->tiempo(), 1, 1, 2]);
            return $this->crearRespuesta("mensaje guardado", 200);
         } catch (\Throwable $th) {
             return $this->crearRespuestaError("No se pudo almacenar ".$th->getMessage(), 300);
@@ -37,7 +37,7 @@ class MensajeController extends Controller
             ->whereDate('mensaje.fecha_creacion', Carbon::today())
             ->where('mensaje.id_destino', $id)
             ->where('mensaje.activo', true)
-            ->orderBy('mensaje.fecha_creacion', 'ASC')
+            ->orderBy('mensaje.fecha_creacion', 'DESC')
             ->get();
             return response()->json(['mensajes' => $data, 'ok'=>true], 200);
         } catch (\Throwable $th) {
@@ -69,6 +69,27 @@ class MensajeController extends Controller
         } catch (\Throwable $th) {
             return $this->crearRespuestaError("No se pudo almacenar ".$th->getMessage(), 300);
         }
-
     }
+    public function getMensajesNuevos($id){
+        $id_status = 5;
+        $data = DB::table('mensaje')
+            ->join('users', 'users.id', '=', 'mensaje.id_origen')
+            ->join('gen_catestatus', 'gen_catestatus.EstatusID', '=', 'mensaje.id_status')
+            ->select("mensaje.id_mensaje", "mensaje.id_viaje","mensaje.titulo", "mensaje.mensaje", "mensaje.tipo", 
+            "users.name", "mensaje.id_status", "gen_catestatus.Estatus")
+            ->where('mensaje.id_destino', $id)
+            ->where('mensaje.id_status', $id_status)
+            ->where('mensaje.activo', true)
+            ->orderBy('mensaje.orden', 'ASC')
+            ->first();
+            $arrVacio = array(
+                "info" => "vacio"
+            );
+        if($data == null){
+            return response()->json(['mensaje' => $arrVacio, 'ok'=>false], 200);
+        }else{
+            return response()->json(['mensaje' => $data, 'ok'=>true], 200);
+        }
+    }
+
 }
