@@ -19,8 +19,9 @@ class MensajeController extends Controller
             activo, fecha_creacion, fecha_modificacion, usuario_creacion,
             usuario_modificacion, orden) 
             values (?,?,?,?,?,?,?,?,?,?,?,?,?)', 
-            [10, 4, $status, 0, "Adeudo de viaje", "PAga we!!", 
-            "TG", true, $this->tiempo(), $this->tiempo(), 1, 1, 2]);
+            [$request->get('id_origen'), $request->get('id_destino'), $status, 
+            $request->get('id_viaje'), $request->get('titulo'), $request->get('mensaje'), 
+             $request->get('tipo'), true, $this->tiempo(), $this->tiempo(), 1, 1, 2]);
            return $this->crearRespuesta("mensaje guardado", 200);
         } catch (\Throwable $th) {
             return $this->crearRespuestaError("No se pudo almacenar ".$th->getMessage(), 300);

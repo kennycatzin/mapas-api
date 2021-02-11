@@ -49,11 +49,12 @@ class ViajeController extends Controller
 
    }
    public function getViajesDiarios($id){
+        $date = Carbon::now();
        $data = DB::table('viaje')
        ->select('*')
        ->where('id_chofer', $id)
        ->where('activo', true)
-       ->whereDate('fecha_creacion', Carbon::today())
+       ->whereBetween('fecha_creacion', [$date->format("Y-m-d")." 00:00:00",$date->format("Y-m-d")." 23:59:59"])
        ->orderBy('fecha_creacion', 'DESC')
        ->get();
 
