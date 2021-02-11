@@ -30,7 +30,7 @@ class Controller extends BaseController
     }
     public function tiempo(){
 
-        return Carbon::now();
+        return Carbon::now('America/Mexico_City');
 
     }
 
