@@ -30,12 +30,13 @@ class MensajeController extends Controller
     public function getMensajes($id){
 
         try {
+            $date = Carbon::now();
             $data = DB::table('mensaje')
             ->join('users', 'users.id', '=', 'mensaje.id_origen')
             ->join('gen_catestatus', 'gen_catestatus.EstatusID', '=', 'mensaje.id_status')
             ->select("mensaje.id_mensaje", "mensaje.titulo", "mensaje.mensaje", "mensaje.tipo", 
-            "users.name", "mensaje.id_status", "gen_catestatus.Estatus")
-            ->whereDate('mensaje.fecha_creacion', Carbon::today())
+            "users.name", "mensaje.id_status", "gen_catestatus.Estatus", "mensaje.fecha_creacion")
+            ->whereBetween('mensaje.fecha_creacion', [$date->format("Y-m-d")." 00:00:00",$date->format("Y-m-d")." 23:59:59"])
             ->where('mensaje.id_destino', $id)
             ->where('mensaje.activo', true)
             ->orderBy('mensaje.fecha_creacion', 'DESC')
