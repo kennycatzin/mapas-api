@@ -30,7 +30,7 @@ class MensajeController extends Controller
     public function getMensajes($id){
 
         try {
-            $date = Carbon::now();
+            $date = Carbon::now('America/Mexico_City');
             $data = DB::table('mensaje')
             ->join('users', 'users.id', '=', 'mensaje.id_origen')
             ->join('gen_catestatus', 'gen_catestatus.EstatusID', '=', 'mensaje.id_status')
@@ -74,7 +74,7 @@ class MensajeController extends Controller
     }
     public function getMensajesNuevos($id){
         $id_status = 5;
-        $date = Carbon::now();
+        $date = Carbon::now('America/Mexico_City');
         $data = DB::table('mensaje')
             ->join('users', 'users.id', '=', 'mensaje.id_origen')
             ->join('gen_catestatus', 'gen_catestatus.EstatusID', '=', 'mensaje.id_status')

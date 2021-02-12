@@ -49,7 +49,7 @@ class ViajeController extends Controller
 
    }
    public function getViajesDiarios($id){
-        $date = Carbon::now();
+        $date = Carbon::now('America/Mexico_City');
        $data = DB::table('viaje')
        ->select('*')
        ->where('id_chofer', $id)
