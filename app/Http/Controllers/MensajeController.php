@@ -36,11 +36,13 @@ class MensajeController extends Controller
             ->join('gen_catestatus', 'gen_catestatus.EstatusID', '=', 'mensaje.id_status')
             ->select("mensaje.id_mensaje", "mensaje.titulo", "mensaje.mensaje", "mensaje.tipo", 
             "users.name", "mensaje.id_status", "gen_catestatus.Estatus", "mensaje.fecha_creacion")
-            ->whereBetween('mensaje.fecha_creacion', [$date->format("Y-m-d")." 00:00:00",$date->format("Y-m-d")." 23:59:59"])
             ->where('mensaje.id_destino', $id)
             ->where('mensaje.activo', true)
+            ->orderBy('mensaje.id_status', 'ASC')
             ->orderBy('mensaje.fecha_creacion', 'DESC')
+            ->take(15)
             ->get();
+            
             return response()->json(['mensajes' => $data, 'ok'=>true], 200);
         } catch (\Throwable $th) {
             return $this->crearRespuestaError('Ha ocurrido un error'. $this->getMessage(), 300);
