@@ -29,21 +29,14 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->post('login', 'AuthController@login');
     $router->get('renovar-token', 'AuthController@renovarToken');
 
-
-    // Matches "/api/profile
-    $router->get('profile', 'UserController@profile');
-
-    // Matches "/api/users/1 
-    //get one user by id
-    $router->get('users/{id}', 'UserController@singleUser');
-
-    // Matches "/api/users
-    $router->get('users', 'UserController@allUsers');
-
     $router->post('store-viaje', 'ViajeController@guardarViaje');
     $router->get('get-viajes/{id}', 'ViajeController@getViajesDiarios');
+    $router->get('get-ultimo-viaje/{id_usuario}', 'ViajeController@getUltimoViaje');
     $router->get('aceptar-viaje/{id_viaje}', 'ViajeController@aceptarViaje');
     $router->get('rechazar-viaje/{id_viaje}', 'ViajeController@rechazarViaje');
+    $router->get('get-estatus-viaje/{id_viaje}', 'ViajeController@getEstatusPago');
+
+    
 
     $router->get('get-tarifas', 'TarifaController@getTarifas');
 
