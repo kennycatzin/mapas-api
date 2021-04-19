@@ -31,10 +31,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->post('store-viaje', 'ViajeController@guardarViaje');
     $router->get('get-viajes/{id}', 'ViajeController@getViajesDiarios');
-    $router->get('get-ultimo-viaje/{id_usuario}', 'ViajeController@getUltimoViaje');
+    $router->get('get-ultimo-viaje/{id_viaje}', 'ViajeController@getUltimoViaje');
     $router->get('aceptar-viaje/{id_viaje}', 'ViajeController@aceptarViaje');
     $router->get('rechazar-viaje/{id_viaje}', 'ViajeController@rechazarViaje');
     $router->get('get-estatus-viaje/{id_viaje}', 'ViajeController@getEstatusPago');
+    $router->get('get-viaje-completado/{id_viaje}', 'ViajeController@getViajeCompletado');
 
     
 

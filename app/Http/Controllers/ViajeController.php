@@ -109,20 +109,37 @@ class ViajeController extends Controller
         return $this->crearRespuesta("Se ha rechazado el viaje", 200);    
     }
     public function getUltimoViaje($id_viaje){
-        $data=DB::table('viaje')
-        ->select('*')
-        ->where('id_viaje', $id_viaje)
-        ->where('activo', 1)
-        ->where('tipo_viaje', 2)
-        ->where('id_status', 11)
-        ->orderBy('id_viaje', 'DESC')
+        
+        $data=DB::table('viaje as v')
+        ->join('gen_catestatus as e', 'e.EstatusID', '=', 'v.id_status')
+        ->select('v.*', 'e.Estatus')
+        ->where('v.id_viaje', $id_viaje)
+        ->where('v.activo', 1)
+        ->where('v.tipo_viaje', 2)
+        ->where('v.id_status', 11)
+        ->orderBy('v.id_viaje', 'DESC')
         ->first();
-
         $userKey=DB::table('users')
         ->select('public_key')
         ->where('id', $data->id_chofer)
         ->first();
         return response()->json(['data' => $data, 'clave'=>$userKey, 'ok'=>true], 200);
+    }
+    public function getViajeCompletado($id_viaje){
+        $data=DB::table('viaje as v')
+        ->join('users as u', 'u.id', '=', 'v.id_chofer')
+        ->join('vw_catoperadores as o', 'o.OperadorID', '=', 'u.id_operador')
+        ->join('pago as p', 'p.id_viaje', '=', 'v.id_viaje')
+        ->select('v.*', DB::raw("CONCAT(o.Nombre,' ',o.ApellidoPaterno) AS nombre"),
+        'p.tarjeta')
+        ->where('v.id_viaje', $id_viaje)
+        ->where('v.activo', 1)
+        ->where('v.tipo_viaje', 2)
+        ->where('v.id_status', 8)
+        ->orderBy('v.id_viaje', 'DESC')
+        ->first();
+
+       return $this->crearRespuesta($data, 200);
 
     }
     public function getEstatusPago($id_viaje){
